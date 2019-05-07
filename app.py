@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, Response
 import traceback
-
+import json
 from service.accident_severity_service import AccidentSeverityService
 
 app = Flask(__name__)
@@ -25,5 +25,21 @@ def predict_severity():
         return render_template("index.html", status=status, res_data=res_data, msg=msg)
 
 
+@app.route('/fetchlabels', methods=["GET"])
+def fetch_labels():
+    status = 404
+    msg = "Error while fetching labels"
+    try:
+        res_data = {
+            "label_data": accident_severity_service.fetch_labels()
+        }
+        print(res_data)
+        return Response(json.dumps(res_data), status=200, mimetype='application/json')
+    except Exception:
+        print("fetchlabels: ", traceback.format_exc())
+        return Response(json.dumps({"msg": msg}), status=404, mimetype='application/json')
+
+
 if __name__ == '__main__':
+    # app.debug = True
     app.run()
