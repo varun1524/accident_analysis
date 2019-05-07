@@ -78,16 +78,16 @@ class AccidentAnalysisPred:
         #             "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions", "Year", "day_of_year",
         #             "month", "Urban_or_Rural_Area"]
 
-        features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
-                    "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
-                    "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
-                    "month", "Urban_or_Rural_Area"]
+        self.features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
+                         "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
+                         "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
+                         "month", "Urban_or_Rural_Area"]
 
         y_train = train['Accident_Severity']
-        x_train = train[features]
+        x_train = train[self.features]
 
         y_test = test['Accident_Severity']
-        x_test = test[features]
+        x_test = test[self.features]
 
         print(test.loc[:, x_train.columns != 'Accident_Severity'].head(0))
 
@@ -163,16 +163,12 @@ class AccidentAnalysisPred:
             "Road_Surface_Conditions": self.le_Road_Surface_Conditions.classes_.tolist(),
             "Pedestrian_Crossing-Human_Control": self.le_Pedestrian_Crossing_Human_Control.classes_.tolist(),
             "Road_Type": self.le_Road_Type.classes_.tolist(),
-
         }
 
-        features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
-                    "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
-                    "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
-                    "month", "Urban_or_Rural_Area"]
-
         print("label_dict: ", label_dict)
+
         return label_dict
+
 
 
 

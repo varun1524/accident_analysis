@@ -20,3 +20,6 @@ class AccidentSeverityService:
     def fetch_labels(self):
         return self.acc_analysis_pred.fetch_labels()
 
+    def fetch_features(self):
+        return self.acc_analysis_pred.features
+
