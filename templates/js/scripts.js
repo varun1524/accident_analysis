@@ -1,23 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Accident Analysis</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
-<body bgcolor="lightblue" style="vertical-align:middle">
-<form id = "form">
-<table id="filters" style="background-color:#F6F6F6;margin: 0px auto;">
-   <tr>
-       <td colspan="2">Accident Severity Prediction</td>
-   </tr>
-</table>
-
-</form>
-
-
-</body>
-<script type="text/javascript">
 $(document).ready(function(){
 fields_taken = []
     $.ajax({
@@ -99,27 +79,12 @@ function predict(){
       type: "post",
       data: values,
       success: function(response) {
-        prd = "Accident Severity will be : "+response.pred
-        alert(prd);
+        alert(response)
       },
       error: function(xhr) {
         //Do Something to handle error
       }
      });
 }
-</script>
-<style type="text/css">
 
-    td {
-            height: 30px;
-            text-align: left;
-            vertical-align: bottom;
-            border-bottom: 1px solid #ddd;
-       }
 
-     tr:hover {background-color: #f5f5f5;}
-
-     tr:nth-child(even) {background-color: #f2f2f2;}
-
-</style>
-</html>
