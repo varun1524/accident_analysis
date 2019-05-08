@@ -13,16 +13,16 @@ def hello_world():
 
 @app.route('/predict', methods=["POST"])
 def predict_severity():
-    status = 404
-    res_data = {}
     msg = {"msg": "Error while predicting severity"}
     try:
-        input_data = request.json
-        status, res_data, msg = accident_severity_service.predict_accident_severity(input_data)
-        return render_template("index.html", status=status, res_data=res_data, msg=msg)
+        input_data = dict(request.form)
+        print("request: -> ", input_data)
+        # status, res_data, msg = accident_severity_service.predict_accident_severity(input_data)
+        res_data = accident_severity_service.predict_accident_severity(input_data)
+        return Response(json.dumps(res_data), status=200, mimetype='application/json')
     except Exception:
         print(traceback.format_exc())
-        return render_template("index.html", status=status, res_data=res_data, msg=msg)
+        return Response(json.dumps(msg), status=404, mimetype='application/json')
 
 
 @app.route('/fetchlabels', methods=["GET"])
@@ -33,7 +33,6 @@ def fetch_labels():
         res_data = {
             "label_data": accident_severity_service.fetch_labels()
         }
-        print(res_data)
         return Response(json.dumps(res_data), status=200, mimetype='application/json')
     except Exception:
         print("fetchlabels: ", traceback.format_exc())

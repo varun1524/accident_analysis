@@ -33,7 +33,7 @@ from IPython.display import Image
 class AccidentAnalysisPred:
 
     def __init__(self):
-        # class_dict = {'Fatal': 1, 'Severe': 2, 'Slight': 3}
+        self.class_dict = {1: 'Fatal', 2: 'Severe', 3: 'Slight'}
 
         class_labels = ['Fatal', 'Severe', 'Slight']
 
@@ -69,6 +69,16 @@ class AccidentAnalysisPred:
         self.le_Pedestrian_Crossing_Human_Control.fit(data1["Pedestrian_Crossing-Human_Control"])
         self.le_Road_Type.fit(data1["Road_Type"])
 
+        print("le_Pedestrian_Crossing_Physical_Facilities: ", self.le_Pedestrian_Crossing_Physical_Facilities.classes_)
+        print("le_Light_Conditions: ", self.le_Light_Conditions.classes_)
+        print("le_Weather_Conditions: ", self.le_Weather_Conditions.classes_)
+        print("le_Road_Surface_Conditions: ", self.le_Road_Surface_Conditions.classes_)
+        print("le_Pedestrian_Crossing_Human_Control: ", self.le_Pedestrian_Crossing_Human_Control.classes_)
+        print("le_Road_Type: ", self.le_Road_Type.classes_)
+
+        data1 = data1[data1['Weather_Conditions'] != 'Unknown']
+        data1 = data1[data1['Road_Type'] != 'Unknown']
+
         data1 = self.preprocess_data(data1)
 
         train, test = train_test_split(data1, test_size=.20)
@@ -78,10 +88,15 @@ class AccidentAnalysisPred:
         #             "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions", "Year", "day_of_year",
         #             "month", "Urban_or_Rural_Area"]
 
+        # self.features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
+        #                  "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
+        #                  "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
+        #                  "month", "Urban_or_Rural_Area"]
+
         self.features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
                          "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
                          "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
-                         "month", "Urban_or_Rural_Area"]
+                         "month"]
 
         y_train = train['Accident_Severity']
         x_train = train[self.features]
@@ -96,15 +111,16 @@ class AccidentAnalysisPred:
         print("y_train: ", y_train.shape)
         print("y_test: ", y_test.shape)
 
-        self.clf = RandomForestClassifier(n_estimators=10)
+        # self.clf = RandomForestClassifier(n_estimators=10)
+        self.clf = RandomForestClassifier()
         self.build_model(x_train, y_train)
 
         self.print_score(y_test, self.predict(x_test))
 
         # estimator = self.clf.estimators_[5]
-        #
+        # #
         # export_graphviz(estimator, out_file='./tree.dot',
-        #                 feature_names=features,
+        #                 feature_names=self.features,
         #                 class_names=class_labels,
         #                 rounded=True, proportion=False,
         #                 precision=2, filled=True)
@@ -123,8 +139,6 @@ class AccidentAnalysisPred:
         return data
 
     def preprocess_data(self, temp_data):
-        temp_data = temp_data[temp_data.Weather_Conditions != 'Unknown']
-        temp_data = temp_data[temp_data.Road_Type != 'Unknown']
         temp_data["Pedestrian_Crossing-Physical_Facilities"]= self.le_Pedestrian_Crossing_Physical_Facilities.transform(temp_data["Pedestrian_Crossing-Physical_Facilities"])
         temp_data["Light_Conditions"]= self.le_Light_Conditions.transform(temp_data["Light_Conditions"])
         temp_data["Weather_Conditions"] = self.le_Weather_Conditions.transform(temp_data["Weather_Conditions"])
@@ -164,9 +178,6 @@ class AccidentAnalysisPred:
             "Pedestrian_Crossing-Human_Control": self.le_Pedestrian_Crossing_Human_Control.classes_.tolist(),
             "Road_Type": self.le_Road_Type.classes_.tolist(),
         }
-
-        print("label_dict: ", label_dict)
-
         return label_dict
 
 
