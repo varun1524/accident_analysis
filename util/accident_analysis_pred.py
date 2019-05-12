@@ -158,6 +158,7 @@ class AccidentAnalysisPred:
         temp_data["Time"] = temp_data["Time"].astype(str)
         temp_data['Time'] = temp_data['Time'].str.slice(0, 2, 1)
         temp_data["Time"] = temp_data["Time"].astype(int)
+        temp_data['Speed_limit'] = temp_data.Speed_limit.apply(lambda x: self.preprocess_speed(x))
         return temp_data
 
     def build_model(self, X_train, Y_train):
@@ -200,6 +201,10 @@ class AccidentAnalysisPred:
         df.loc[1] = self.test_df.iloc[ind]
         print("print_df: ", df.to_dict())
         return df.to_dict()
+
+    def preprocess_speed(self, data):
+        data = int(int(data) / 10)
+        return data
 
 
 
