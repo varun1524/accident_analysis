@@ -107,5 +107,4 @@ venv.bak/
 .idea
 *.pyc
 *.DS_Store
-data
 *.dot

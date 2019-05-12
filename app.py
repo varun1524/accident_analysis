@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, jsonify, Response
 import traceback
 import json
 from service.accident_severity_service import AccidentSeverityService
+import os
 
 app = Flask(__name__)
 accident_severity_service = AccidentSeverityService()
 
-@app.route('/')
+
+@app.route('/', methods=["GET"])
 def hello_world():
     return render_template('index.html')
 
@@ -54,7 +56,12 @@ def fetch_features():
         return Response(json.dumps({"msg": msg}), status=404, mimetype='application/json')
 
 
+@app.route('/status', methods=["GET"])
+def status():
+    return jsonify({"status": "success"})
+
+
 if __name__ == '__main__' or __name__ == 'app':
-    # app.debug = True
-    print("server is running")
-    app.run()
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port, debug=True)
+    print("server started: ", port)
