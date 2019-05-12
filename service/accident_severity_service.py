@@ -6,15 +6,17 @@ from tabulate import tabulate
 class AccidentSeverityService:
     def __init__(self):
         self.acc_analysis_pred = AccidentAnalysisPred()
-
-    def validate_input(self):
-        pass
+        ind1 = self.acc_analysis_pred.get_class_index(self.acc_analysis_pred.pred, 1)
+        ind2 = self.acc_analysis_pred.get_class_index(self.acc_analysis_pred.pred, 2)
+        # ind3 = self.acc_analysis_pred.get_class_index(self.acc_analysis_pred.pred, 3)
+        print("Severity FATAL", self.acc_analysis_pred.print_df_row(ind1))
+        print("Severity SEVERE", self.acc_analysis_pred.print_df_row(ind2))
 
     def preprocessing_input(self, input_data):
         input_dict = {}
         # input_data["Day_of_Week"] = int(input_data["Day_of_Week"])
-        # input_data["Speed_limit"] = int(input_data["Speed_limit"])
-        # input_data["Number_of_Vehicles"] = int(input_data["Number_of_Vehicles"])
+        input_data["Speed_limit"] = int(input_data["Speed_limit"])
+        input_data["Number_of_Vehicles"] = int(input_data["Number_of_Vehicles"])
 
         for key, value in input_data.items():
             input_dict[key] = [value]

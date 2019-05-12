@@ -93,16 +93,23 @@ class AccidentAnalysisPred:
         #                  "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
         #                  "month", "Urban_or_Rural_Area"]
 
-        self.features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
+        #
+        # self.features = ["Number_of_Vehicles", "Day_of_Week", "Time", "Road_Type", "Speed_limit",
+        #                  "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
+        #                  "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
+        #                  "month"]
+
+        self.features = ["Number_of_Vehicles", "Time", "Road_Type", "Speed_limit",
                          "Pedestrian_Crossing-Human_Control", "Pedestrian_Crossing-Physical_Facilities",
-                         "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions",
-                         "month"]
+                         "Light_Conditions", "Weather_Conditions", "Road_Surface_Conditions"]
 
         y_train = train['Accident_Severity']
         x_train = train[self.features]
 
         y_test = test['Accident_Severity']
         x_test = test[self.features]
+
+        self.test_df = x_test
 
         print(test.loc[:, x_train.columns != 'Accident_Severity'].head(0))
 
@@ -114,8 +121,11 @@ class AccidentAnalysisPred:
         # self.clf = RandomForestClassifier(n_estimators=10)
         self.clf = RandomForestClassifier()
         self.build_model(x_train, y_train)
-
-        self.print_score(y_test, self.predict(x_test))
+        self.pred = self.predict(x_test)
+        self.print_score(y_test, self.pred)
+        # self.get_console(pred, 1)
+        # self.get_console(pred, 2)
+        # self.get_console(pred, 3)
 
         # estimator = self.clf.estimators_[5]
         # #
@@ -179,6 +189,17 @@ class AccidentAnalysisPred:
             "Road_Type": self.le_Road_Type.classes_.tolist(),
         }
         return label_dict
+
+    def get_class_index(self, pred, class_label):
+        for i in range(len(pred)):
+            if pred[i] == class_label:
+                return i
+
+    def print_df_row(self, ind):
+        df = pd.DataFrame(columns=self.features)
+        df.loc[1] = self.test_df.iloc[ind]
+        print("print_df: ", df.to_dict())
+        return df.to_dict()
 
 
 

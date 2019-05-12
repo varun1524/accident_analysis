@@ -54,6 +54,7 @@ def fetch_features():
         return Response(json.dumps({"msg": msg}), status=404, mimetype='application/json')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'app':
     # app.debug = True
+    print("server is running")
     app.run()
