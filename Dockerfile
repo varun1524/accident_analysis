@@ -20,7 +20,7 @@ COPY . /
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "python", "./app.py" ]
+ENTRYPOINT [ "python", "app.py" ]
 
-EXPOSE 5001
+EXPOSE 5000
 
