@@ -37,9 +37,9 @@ class AccidentAnalysisPred:
 
         class_labels = ['Fatal', 'Severe', 'Slight']
 
-        data1 = pd.read_csv("./data/accidents_2005_to_2007.csv")
-        data2 = pd.read_csv("./data/accidents_2009_to_2011.csv")
-        data3 = pd.read_csv("./data/accidents_2012_to_2014.csv")
+        data1 = pd.read_csv("./data/accidents_2005_to_2007.csv", low_memory=False)
+        data2 = pd.read_csv("./data/accidents_2009_to_2011.csv", low_memory=False)
+        data3 = pd.read_csv("./data/accidents_2012_to_2014.csv", low_memory=False)
 
         data = pd.concat([data1, data2, data3])
 
